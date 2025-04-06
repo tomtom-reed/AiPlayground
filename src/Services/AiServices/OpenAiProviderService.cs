@@ -69,4 +69,25 @@ public class OpenAiProviderService {
 
         return r;
     }
+
+    /*public void CreateOpenAIAssistant()
+    {
+        #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        var assistantClient = _client.GetAssistantClient();
+        AssistantCreationOptions options = new AssistantCreationOptions();
+        options.Description = "";
+        options.Instructions = "";
+        options.Name = "";
+        options.ToolResources;
+        options.Tools;
+        var tools = new List<ToolDefinition>();
+        // var t1 = new ToolDefinition();
+        var resources = new List<ToolResources>();
+        var r1 = new ToolResources();
+        assistantClient.CreateAssistant();
+
+
+        _client.
+        #pragma warning restore OPENAI001
+    }*/
 }
