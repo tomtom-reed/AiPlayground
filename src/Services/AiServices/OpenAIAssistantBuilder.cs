@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Schema;
-using System.Threading.Tasks;
 using OpenAI;
 using OpenAI.Assistants;
 using OpenAI.Files;
@@ -27,6 +21,8 @@ public class OpenAIAssistantBuilder
     private string _instructions = "";
     private float? _temperature;
     private readonly IEnumerable<MyVectorStore> _files = new List<MyVectorStore>();
+    private readonly Type? _responseFormat = null;
+
     private struct MyVectorStore
     {
         public string Name {get; set;}
@@ -39,7 +35,7 @@ public class OpenAIAssistantBuilder
         _baseModel = baseModel;
     }
 
-    public Assistant Build()
+    public OpenAIAssistant Build()
     {
         var options = new AssistantCreationOptions() 
         {
@@ -74,9 +70,9 @@ public class OpenAIAssistantBuilder
             // add Vector Store to Options
             options.ToolResources.FileSearch.VectorStoreIds.Add(vs.VectorStoreId);
         }
-        var assist = _client.GetAssistantClient().CreateAssistant(_name, options);
+        var assist = _client.GetAssistantClient().CreateAssistant(_baseModel, options);
         
-        return assist.Value;
+        return new OpenAIAssistant(assist.Value, _responseFormat ?? typeof(string));
     }
 
     /// <summary>
@@ -156,6 +152,10 @@ public class OpenAIAssistantBuilder
     /// <returns></returns>
     public OpenAIAssistantBuilder AddResponseFormat(string name, Type template)
     {
+        if (template == typeof(string))
+        {
+            return this;
+        }
         var options = JsonSerializerOptions.Default;
         JsonSchemaExporterOptions exporterOptions = new()
         {

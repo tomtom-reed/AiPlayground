@@ -8,12 +8,12 @@ namespace AiPlayground.ServiceTests;
 
 public abstract class TestBase
 {
-    protected readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public TestBase()
     {
         var builder = WebApplication.CreateBuilder();
-        builder.Services.AddSingleton<OpenAiProviderService>(new OpenAiProviderService());
+        // builder.Services.AddSingleton<OpenAiProviderService>(new OpenAiProviderService());
 
         _serviceProvider = builder.Services.BuildServiceProvider();
     }
